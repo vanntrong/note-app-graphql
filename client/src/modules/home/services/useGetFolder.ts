@@ -1,5 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 import { Folder } from "../../../interfaces/folder.interface";
+import { BaseServiceOptions } from "../../../types/common";
 
 export const GET_FOLDER = gql`
   query Folder($folderId: String!) {
@@ -19,7 +20,11 @@ interface GetFolderResponse {
   folder: Folder;
 }
 
-const useGetFolder = ({ folderId }: { folderId?: string }) => {
+interface UseGetFolderOptions extends BaseServiceOptions {
+  folderId?: string;
+}
+
+const useGetFolder = ({ folderId }: UseGetFolderOptions) => {
   const { data, loading, error, refetch } = useQuery<GetFolderResponse>(
     GET_FOLDER,
     {

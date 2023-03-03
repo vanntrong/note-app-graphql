@@ -1,4 +1,5 @@
 import { gql, useMutation } from "@apollo/client";
+import { BaseServiceOptions } from "../../../types/common";
 import { GET_FOLDER } from "./useGetFolder";
 
 const ADD_NOTE = gql`
@@ -11,8 +12,12 @@ const ADD_NOTE = gql`
   }
 `;
 
-const useAddNote = () => {
-  const [addNote, { data, loading, error }] = useMutation(ADD_NOTE);
+const useAddNote = (options?: BaseServiceOptions) => {
+  const [addNote, { data, loading, error }] = useMutation(ADD_NOTE, {
+    onCompleted: () => {
+      options?.onSuccess?.();
+    },
+  });
 
   return {
     addNote,

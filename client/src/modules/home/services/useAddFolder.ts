@@ -1,5 +1,6 @@
 import { gql, useMutation } from "@apollo/client";
 import { Folder } from "../../../interfaces/folder.interface";
+import { BaseServiceOptions } from "../../../types/common";
 import { GET_ALL_FOLDERS } from "./useGetAllFolders";
 
 const ADD_FOLDER = gql`
@@ -15,7 +16,7 @@ interface AddFolderResponse {
   createFolder: Folder;
 }
 
-const useAddFolder = () => {
+const useAddFolder = (options?: BaseServiceOptions) => {
   const [addFolder, { data, loading, error }] = useMutation<AddFolderResponse>(
     ADD_FOLDER,
     {

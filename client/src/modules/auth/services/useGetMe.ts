@@ -2,6 +2,7 @@ import { gql } from "@apollo/client/core";
 import { useQuery } from "@apollo/client/react/hooks";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { BaseServiceOptions } from "../../../types/common";
 import { removeCookie } from "../../../utils/cookies";
 
 const GET_ME = gql`
@@ -24,9 +25,9 @@ interface GetMeResponse {
   };
 }
 
-const useGetMe = ({ skip = false }: { skip?: boolean }) => {
+const useGetMe = (options?: BaseServiceOptions) => {
   const { data, loading, error } = useQuery<GetMeResponse>(GET_ME, {
-    skip: skip,
+    skip: options?.skip,
   });
 
   useEffect(() => {

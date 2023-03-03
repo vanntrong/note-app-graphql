@@ -1,4 +1,5 @@
 import { gql, useMutation } from "@apollo/client";
+import { BaseServiceOptions } from "../../../types/common";
 
 const UPDATE_NOTE = gql`
   mutation UpdateNoteContent($noteId: String!, $content: String!) {
@@ -8,9 +9,15 @@ const UPDATE_NOTE = gql`
   }
 `;
 
-const useUpdateNodeContent = () => {
-  const [updateNoteContent, { data, loading, error }] =
-    useMutation(UPDATE_NOTE);
+const useUpdateNodeContent = (options?: BaseServiceOptions) => {
+  const [updateNoteContent, { data, loading, error }] = useMutation(
+    UPDATE_NOTE,
+    {
+      onCompleted: () => {
+        options?.onSuccess?.();
+      },
+    }
+  );
 
   return {
     updateNoteContent,

@@ -3,6 +3,7 @@ import { FC, useEffect, useState } from "react";
 import { useAppContext } from "../../../../contexts/app.context";
 import useDebounce from "../../../../hooks/useDebounce";
 import { Note } from "../../../../interfaces/note.interface";
+import useAddNote from "../../services/useAddNote";
 import useGetFolder from "../../services/useGetFolder";
 import useUpdateNodeContent from "../../services/useUpdateNote";
 import Editor from "../editor";
@@ -17,8 +18,8 @@ const NoteContainer: FC = () => {
   const { data, refetch } = useGetFolder({
     folderId: selectedFolderId,
   });
-  const { updateNoteContent, data: updateNoteContentData } =
-    useUpdateNodeContent();
+  const { addNote } = useAddNote({ onSuccess: refetch });
+  const { updateNoteContent } = useUpdateNodeContent({ onSuccess: refetch });
 
   const debounce = useDebounce(selectedNote?.content);
 
@@ -32,12 +33,6 @@ const NoteContainer: FC = () => {
       });
     }
   }, [debounce]);
-
-  useEffect(() => {
-    if (updateNoteContentData) {
-      refetch();
-    }
-  }, [updateNoteContentData]);
 
   useEffect(() => {
     setSelectedNote(undefined);
@@ -56,16 +51,19 @@ const NoteContainer: FC = () => {
         <Grid xs={3}>
           <Notes
             notes={data?.folder.notes || []}
-            selectedFolderId={selectedFolderId}
-            reflectFetchNote={refetch}
             setSelectedNote={setSelectedNote}
             selectedNote={selectedNote}
+            onAddNote={() =>
+              addNote({
+                variables: { content: "empty", folderId: selectedFolderId },
+              })
+            }
           />
         </Grid>
         <Grid xs={6}>
           {selectedNote && (
             <Editor
-              content={selectedNote?.content}
+              content={selectedNote.content}
               onChange={(value) =>
                 setSelectedNote((prev) =>
                   prev ? { ...prev, content: value } : prev

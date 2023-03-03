@@ -1,34 +1,23 @@
 import { Container, Text } from "@nextui-org/react";
+import dayjs from "dayjs";
+import { FC } from "react";
+import { Note as NoteInterface } from "../../../../interfaces/note.interface";
 import { Button, Header, List, Title } from "../../styles";
 import { Note } from "./styles";
-import { Note as NoteInterface } from "../../../../interfaces/note.interface";
-import { FC, useEffect } from "react";
-import dayjs from "dayjs";
-import useAddNote from "../../services/useAddNote";
 
 interface NotesProps {
   notes: NoteInterface[];
-  selectedFolderId?: string;
-  reflectFetchNote?: () => void;
   setSelectedNote?: (note: NoteInterface) => void;
   selectedNote?: NoteInterface;
+  onAddNote?: () => void;
 }
 
 const Notes: FC<NotesProps> = ({
   notes,
-  selectedFolderId,
-  reflectFetchNote,
   setSelectedNote,
   selectedNote,
+  onAddNote,
 }) => {
-  const { addNote, data } = useAddNote();
-
-  useEffect(() => {
-    if (data) {
-      reflectFetchNote?.();
-    }
-  }, [data]);
-
   return (
     <Container
       direction="column"
@@ -36,16 +25,7 @@ const Notes: FC<NotesProps> = ({
     >
       <Header>
         <Title h5>Notes</Title>
-        <Button
-          light
-          ghost
-          size={"sm"}
-          onPress={() =>
-            addNote({
-              variables: { content: "empty", folderId: selectedFolderId },
-            })
-          }
-        >
+        <Button light ghost size={"sm"} onPress={onAddNote}>
           Add
         </Button>
       </Header>

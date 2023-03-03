@@ -5,6 +5,7 @@ import { app } from "../../../configs/firebase";
 import { useAuthContext } from "../../../contexts/auth.context";
 import { setCookie } from "../../../utils/cookies";
 import { useEffect } from "react";
+import { BaseServiceOptions } from "../../../types/common";
 
 const REGISTER = gql`
   mutation Register(
@@ -37,7 +38,7 @@ interface RegisterResponse {
   };
 }
 
-const useLogin = () => {
+const useLogin = (options?: BaseServiceOptions) => {
   const [register, { loading, data, error }] =
     useMutation<RegisterResponse>(REGISTER);
 
