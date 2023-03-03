@@ -39,6 +39,10 @@ const NoteContainer: FC = () => {
     }
   }, [updateNoteContentData]);
 
+  useEffect(() => {
+    setSelectedNote(undefined);
+  }, [selectedFolderId]);
+
   return (
     <Card>
       <Container css={{ backgroundColor: "white" }}>
