@@ -9,9 +9,7 @@ export const authorizationJWT = (
   const token = req.headers.authorization;
 
   if (!token) {
-    return res.status(401).json({
-      message: "Unauthorized",
-    });
+    return next();
   }
 
   const [, jwt] = token.split(" ");

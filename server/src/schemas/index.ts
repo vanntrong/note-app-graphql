@@ -21,12 +21,12 @@ export const typeDefs = `#graphql
 
     type Author {
         _id:String!
-        firstName:String!
-        lastName:String!
+        displayName:String!
         email:String!
         createdAt:Date!
         updatedAt:Date
         avatar:String
+        uid:String!
     }
 
     type Query {
@@ -34,12 +34,13 @@ export const typeDefs = `#graphql
         folder(folderId:String!): Folder
         notes:[Note]
         note(noteId:String!): Note
+        me:Author
     }
 
     type Mutation {
         createFolder(name:String!, description:String):Folder
         addNote(content:String!, folderId:String!):Note
         updateNoteContent(noteId:String!, content:String!):Note
-        register(firstName:String!, lastName:String!, email:String!, password:String!):Author    
+        register(displayName:String!, email:String!, avatar:String!, uid:String!):Author    
     }
 `;

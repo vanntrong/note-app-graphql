@@ -1,9 +1,11 @@
 import { AppContext } from "@/contexts/app.context";
 import { FolderService } from "@/modules/folder/folder.service";
 import { NoteService } from "@/modules/note/note.service";
+import { UserService } from "@/modules/user/user.service";
 
 const folderService = new FolderService();
 const noteService = new NoteService();
+const userService = new UserService();
 
 export const resolvers = {
   Query: {
@@ -24,6 +26,11 @@ export const resolvers = {
     },
     note: async (_: unknown, args: { noteId: string; folderId: string }) => {
       return noteService.getOne(args.noteId, args.folderId);
+    },
+
+    me: async (_: unknown, __: unknown, context: AppContext) => {
+      if (!context.uid) throw new Error("Unauthorized");
+      return userService.getOneByUID(context.uid);
     },
   },
 
@@ -52,6 +59,18 @@ export const resolvers = {
       args: { noteId: string; content: string }
     ) => {
       return noteService.updateContent(args.noteId, args.content);
+    },
+
+    register: async (
+      _: unknown,
+      args: { displayName: string; email: string; avatar: string; uid: string }
+    ) => {
+      return userService.register(
+        args.displayName,
+        args.email,
+        args.avatar,
+        args.uid
+      );
     },
   },
 };

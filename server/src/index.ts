@@ -32,9 +32,9 @@ async function bootstrap() {
     authorizationJWT,
     bodyParser.json(),
     expressMiddleware(server, {
-      context: async ({ req }) => {
+      context: async ({ req }: { req: any }) => {
         return {
-          uid: "123123123123",
+          uid: req.uid,
         };
       },
     })

@@ -11,10 +11,30 @@ export class FolderService {
   }
 
   async getOne(folderId: string, authorId?: string) {
-    return FolderCollection.findOne({
-      _id: new ObjectId(folderId),
-      author: authorId,
-    });
+    const folder = await FolderCollection.aggregate([
+      {
+        $match: {
+          $and: [
+            {
+              _id: new ObjectId(folderId),
+            },
+            {
+              author: authorId,
+            },
+          ],
+        },
+      },
+      {
+        $lookup: {
+          from: "notes",
+          localField: "_id",
+          foreignField: "folder",
+          as: "notes",
+        },
+      },
+    ]).toArray();
+
+    return folder[0];
   }
 
   async create(name: string, authorId: string, description?: string) {
